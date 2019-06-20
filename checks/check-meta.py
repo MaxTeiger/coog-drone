@@ -6,6 +6,7 @@ import re
 import sys
 import requests
 import base64
+import update_redmine
 
 REPO = os.environ['DRONE_REPO_NAME']
 PR = os.environ['DRONE_PULL_REQUEST']
@@ -373,6 +374,10 @@ def main():
     ok = check_content() and ok
     ok = check_redmine() and ok
     ok = check_files() and ok
+
+    if ok: 
+        print("Meta check ok... Updating redmine tickets")
+        update_redmine.update_redmine()
 
     if not ok:
         if 'bypass meta check' in gh_labels:
